@@ -10,3 +10,5 @@ tlp_stop_charge: 80
 
 wwan_fcc_unlock_vid: "1eac"
 wwan_fcc_unlock_pid: "1001"
+
+desktop_wm: i3wm

@@ -1,0 +1,52 @@
+- name: Install Claude Code via official script
+  ansible.builtin.shell: |
+    curl -fsSL https://console.anthropic.com/install.sh | sh
+  args:
+    creates: "/home/{{ username }}/.local/bin/claude"
+  become: true
+  become_user: "{{ username }}"
+
+- name: Ensure ~/.claude directory exists
+  ansible.builtin.file:
+    path: "/home/{{ username }}/.claude"
+    state: directory
+    owner: "{{ username }}"
+    mode: "0755"
+  become: true
+  become_user: "{{ username }}"
+
+- name: Deploy CLAUDE.md
+  ansible.builtin.template:
+    src: CLAUDE.md.j2
+    dest: "/home/{{ username }}/.claude/CLAUDE.md"
+    owner: "{{ username }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ username }}"
+
+- name: Deploy settings.json
+  ansible.builtin.copy:
+    src: settings.json
+    dest: "/home/{{ username }}/.claude/settings.json"
+    owner: "{{ username }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ username }}"
+
+- name: Deploy settings.local.json (only if not present)
+  ansible.builtin.template:
+    src: settings.local.json.j2
+    dest: "/home/{{ username }}/.claude/settings.local.json"
+    owner: "{{ username }}"
+    mode: "0644"
+    force: false
+  become: true
+  become_user: "{{ username }}"
+
+- name: Install Claude Code plugins
+  ansible.builtin.shell: |
+    /home/{{ username }}/.local/bin/claude plugins install {{ item }}
+  loop: "{{ claude_plugins }}"
+  become: true
+  become_user: "{{ username }}"
+  changed_when: false

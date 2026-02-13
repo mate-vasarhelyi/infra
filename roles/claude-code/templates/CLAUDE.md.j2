@@ -1,0 +1,25 @@
+# System
+
+- OS: {{ ansible_distribution }}{% if desktop_wm is defined %}, {{ desktop_wm }}{% endif %}
+
+- Shell: zsh (minimal, no oh-my-zsh)
+{% if 'desktop' in ansible_play_tags | default([]) %}
+- Terminal: kitty (FiraCode Nerd Font)
+- Browser: Zen
+{% endif %}
+
+# Infrastructure
+
+Managed via Ansible repo at `~/.infra`.
+
+```
+cd ~/.infra
+ansible-playbook site.yml --tags <tags> --ask-vault-pass
+```
+
+{% if ansible_os_family != 'Darwin' %}
+# Sudo in Claude Code
+
+Use `sudo -A` for privileged commands — rofi askpass popup at `~/.local/bin/sudo-askpass`.
+Fallback: write commands to `/tmp/claude-pending.sh`, user runs `run-claude` in another terminal.
+{% endif %}
