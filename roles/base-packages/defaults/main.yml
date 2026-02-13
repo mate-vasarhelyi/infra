@@ -7,6 +7,7 @@ base_packages:
   - unzip
   - man-db
   - openssh
+  - sudo
 
 base_packages_archlinux:
   - ripgrep

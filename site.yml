@@ -7,13 +7,21 @@
       ansible.builtin.setup:
       tags: always
 
+    - name: Ensure sudo is installed
+      ansible.builtin.package:
+        name: sudo
+        state: present
+      tags: always
+
     - name: Ensure user exists
       ansible.builtin.user:
         name: "{{ username }}"
+        password: "{{ user_password | password_hash('sha512') }}"
         shell: /usr/bin/bash
         create_home: true
         groups: wheel
         append: true
+        update_password: on_create
       tags: always
 
     - name: Enable sudo for wheel group
