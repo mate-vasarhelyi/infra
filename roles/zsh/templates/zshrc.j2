@@ -1,0 +1,28 @@
+# History
+HISTFILE=~/.histfile
+HISTSIZE=10000
+SAVEHIST=10000
+bindkey -e
+
+# Completion
+zstyle :compinstall filename '{{ ansible_env.HOME }}/.zshrc'
+autoload -Uz compinit
+compinit
+
+# SUDO_ASKPASS
+{% if ansible_os_family != 'Darwin' %}
+export SUDO_ASKPASS="$HOME/.local/bin/sudo-askpass"
+{% endif %}
+
+# PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# Aliases
+alias ll='ls -la'
+alias la='ls -a'
+
+# Infra repo management
+alias infra='cd ~/.infra'
+
+# Starship prompt
+eval "$(starship init zsh)"
