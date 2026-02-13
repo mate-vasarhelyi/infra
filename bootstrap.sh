@@ -14,6 +14,8 @@ fi
 
 # Detect distro and install prerequisites
 if command -v pacman &>/dev/null; then
+    $SUDO pacman-key --init
+    $SUDO pacman-key --populate archlinux
     $SUDO pacman -Syu --noconfirm git ansible
 elif command -v apt &>/dev/null; then
     $SUDO apt update && $SUDO apt full-upgrade -y && $SUDO apt install -y git ansible
