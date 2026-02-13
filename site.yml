@@ -7,6 +7,13 @@
       ansible.builtin.setup:
       tags: always
 
+    - name: Ensure user exists
+      ansible.builtin.user:
+        name: "{{ username }}"
+        shell: /usr/bin/bash
+        create_home: true
+      tags: always
+
   roles:
     # common
     - { role: base-packages,   tags: [common] }

@@ -3,13 +3,6 @@
     name: "{{ base_packages_archlinux }}"
     state: present
 
-- name: Check if user exists
-  ansible.builtin.getent:
-    database: passwd
-    key: "{{ username }}"
-  register: user_exists
-  failed_when: false
-
 - name: Check if yay is installed
   ansible.builtin.command: which yay
   register: yay_check
@@ -17,9 +10,7 @@
   failed_when: false
 
 - name: Install yay (AUR helper)
-  when:
-    - yay_check.rc != 0
-    - user_exists is not failed
+  when: yay_check.rc != 0
   become: true
   become_user: "{{ username }}"
   block:
