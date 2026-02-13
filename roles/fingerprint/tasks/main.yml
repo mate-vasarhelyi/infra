@@ -1,0 +1,11 @@
+- name: Install fprintd
+  ansible.builtin.package:
+    name: fprintd
+    state: present
+
+- name: Ensure pam_fprintd is in system-auth
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/system-auth
+    insertafter: '^auth.*pam_unix'
+    line: 'auth      sufficient pam_fprintd.so'
+    state: present

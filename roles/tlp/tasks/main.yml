@@ -1,0 +1,24 @@
+- name: Install TLP
+  ansible.builtin.package:
+    name:
+      - tlp
+      - tlp-rdw
+    state: present
+
+- name: Deploy TLP config
+  ansible.builtin.template:
+    src: 01-thinkpad.conf.j2
+    dest: /etc/tlp.d/01-thinkpad.conf
+    mode: "0644"
+  notify: restart tlp
+
+- name: Enable TLP
+  ansible.builtin.systemd:
+    name: tlp
+    enabled: true
+    state: started
+
+- name: Mask conflicting rfkill socket
+  ansible.builtin.systemd:
+    name: systemd-rfkill.socket
+    masked: true

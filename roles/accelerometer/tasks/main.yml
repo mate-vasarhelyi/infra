@@ -1,0 +1,13 @@
+- name: Install iio-sensor-proxy
+  ansible.builtin.package:
+    name: iio-sensor-proxy
+    state: present
+
+- name: Deploy auto-rotate script
+  ansible.builtin.template:
+    src: auto-rotate.j2
+    dest: "/home/{{ username }}/.local/bin/auto-rotate"
+    owner: "{{ username }}"
+    mode: "0755"
+  become: true
+  become_user: "{{ username }}"

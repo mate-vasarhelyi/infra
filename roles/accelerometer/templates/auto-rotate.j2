@@ -1,0 +1,31 @@
+#!/bin/bash
+# Auto-rotate screen and touch inputs based on accelerometer
+# Requires: iio-sensor-proxy, xrandr, xinput
+
+SCREEN="{{ accelerometer_screen }}"
+TOUCH_DEVICES=({% for dev in accelerometer_touch_devices %}"{{ dev }}" {% endfor %})
+
+rotate_screen() {
+    local orientation="$1"
+    local xrandr_rot matrix
+
+    case "$orientation" in
+        normal)    xrandr_rot="normal";  matrix="1 0 0 0 1 0 0 0 1" ;;
+        left-up)   xrandr_rot="left";    matrix="0 -1 1 1 0 0 0 0 1" ;;
+        right-up)  xrandr_rot="right";   matrix="0 1 0 -1 0 1 0 0 1" ;;
+        bottom-up) xrandr_rot="inverted"; matrix="-1 0 1 0 -1 1 0 0 1" ;;
+        *) return ;;
+    esac
+
+    xrandr --output "$SCREEN" --rotate "$xrandr_rot"
+    for device in "${TOUCH_DEVICES[@]}"; do
+        xinput set-prop "$device" "Coordinate Transformation Matrix" $matrix 2>/dev/null
+    done
+}
+
+monitor-sensor | while read -r line; do
+    if [[ "$line" =~ "Accelerometer orientation changed:" ]]; then
+        orientation="${line##*: }"
+        rotate_screen "$orientation"
+    fi
+done

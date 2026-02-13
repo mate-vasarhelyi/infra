@@ -1,0 +1,22 @@
+- name: Install ModemManager
+  ansible.builtin.package:
+    name: modemmanager
+    state: present
+
+- name: Enable ModemManager
+  ansible.builtin.systemd:
+    name: ModemManager
+    enabled: true
+    state: started
+
+- name: Create FCC unlock directory
+  ansible.builtin.file:
+    path: /etc/ModemManager/fcc-unlock.d
+    state: directory
+    mode: "0755"
+
+- name: Create FCC unlock symlink
+  ansible.builtin.file:
+    src: /usr/share/ModemManager/fcc-unlock.available.d/{{ wwan_fcc_unlock_vid }}:{{ wwan_fcc_unlock_pid }}
+    dest: /etc/ModemManager/fcc-unlock.d/{{ wwan_fcc_unlock_vid }}:{{ wwan_fcc_unlock_pid }}
+    state: link
