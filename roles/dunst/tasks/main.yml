@@ -1,0 +1,22 @@
+- name: Install dunst
+  ansible.builtin.package:
+    name: dunst
+    state: present
+
+- name: Ensure dunst config directory exists
+  ansible.builtin.file:
+    path: "/home/{{ username }}/.config/dunst"
+    state: directory
+    owner: "{{ username }}"
+    mode: "0755"
+  become: true
+  become_user: "{{ username }}"
+
+- name: Deploy dunstrc
+  ansible.builtin.copy:
+    src: dunstrc
+    dest: "/home/{{ username }}/.config/dunst/dunstrc"
+    owner: "{{ username }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ username }}"
