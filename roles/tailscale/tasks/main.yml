@@ -1,0 +1,8 @@
+- name: Include distro-specific install
+  ansible.builtin.include_tasks: "{{ ansible_os_family | lower }}.yml"
+
+- name: Enable and start tailscaled
+  ansible.builtin.systemd:
+    name: tailscaled
+    enabled: true
+    state: started

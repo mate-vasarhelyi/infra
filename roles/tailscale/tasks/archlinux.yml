@@ -1,0 +1,4 @@
+- name: Install tailscale (Arch)
+  community.general.pacman:
+    name: tailscale
+    state: present
