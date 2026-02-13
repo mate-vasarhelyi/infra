@@ -1,0 +1,13 @@
+- name: Install i3 and dependencies (Debian)
+  ansible.builtin.apt:
+    name:
+      - i3
+      - i3blocks
+      - i3lock
+      - feh
+      - xss-lock
+      - scrot
+      - playerctl
+      - policykit-1-gnome
+      - dex
+    state: present

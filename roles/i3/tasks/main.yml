@@ -1,0 +1,45 @@
+- name: Skip on non-Linux
+  ansible.builtin.meta: end_play
+  when: ansible_system != 'Linux'
+
+- name: Include distro-specific install
+  ansible.builtin.include_tasks: "{{ ansible_os_family | lower }}.yml"
+
+- name: Ensure i3 config directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ username }}"
+    mode: "0755"
+  loop:
+    - "/home/{{ username }}/.config/i3"
+    - "/home/{{ username }}/.config/i3/scripts"
+  become: true
+  become_user: "{{ username }}"
+
+- name: Deploy i3 config
+  ansible.builtin.copy:
+    src: config
+    dest: "/home/{{ username }}/.config/i3/config"
+    owner: "{{ username }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ username }}"
+
+- name: Deploy i3blocks config
+  ansible.builtin.copy:
+    src: i3blocks.conf
+    dest: "/home/{{ username }}/.config/i3/i3blocks.conf"
+    owner: "{{ username }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ username }}"
+
+- name: Deploy i3 scripts
+  ansible.builtin.copy:
+    src: scripts/
+    dest: "/home/{{ username }}/.config/i3/scripts/"
+    owner: "{{ username }}"
+    mode: "0755"
+  become: true
+  become_user: "{{ username }}"
