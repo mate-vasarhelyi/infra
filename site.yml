@@ -2,9 +2,6 @@
   connection: local
   become: true
 
-  vars:
-    username: "{{ lookup('env', 'USER') }}"
-
   pre_tasks:
     - name: Gather facts
       ansible.builtin.setup:
@@ -20,6 +17,7 @@
     - { role: fonts,           tags: [common] }
     - { role: tailscale,       tags: [common] }
     - { role: claude-code,     tags: [common] }
+    - { role: docker,          tags: [common] }
     - { role: custom-scripts,  tags: [common] }
 
     # desktop
@@ -28,9 +26,6 @@
     - { role: dunst,           tags: [desktop] }
     - { role: kitty,           tags: [desktop] }
     - { role: touchpad,        tags: [desktop] }
-
-    # server / services
-    - { role: docker,          tags: [server, media] }
 
     # purpose
     - { role: docker-stacks,   tags: [media], vars: { stack: media } }

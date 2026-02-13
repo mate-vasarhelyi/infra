@@ -18,8 +18,15 @@ ansible-playbook site.yml --tags <tags> --ask-vault-pass
 ```
 
 {% if ansible_os_family != 'Darwin' %}
-# Sudo in Claude Code
+# Privileged / Manual Commands
 
-Use `sudo -A` for privileged commands — rofi askpass popup at `~/.local/bin/sudo-askpass`.
-Fallback: write commands to `/tmp/claude-pending.sh`, user runs `run-claude` in another terminal.
+When you need the user to run something manually (privileged commands, interactive prompts, anything that can't run inside Claude Code):
+
+1. Write the commands to `/tmp/claude-pending.sh`
+2. Tell the user to run `run-claude` in another terminal
+3. Read the output from `/tmp/claude-pending.log` to check the result
+
+**Always use this pattern** — never ask the user to copy-paste commands from chat. The terminal breaks up long lines and makes copy-paste unreliable.
+
+For simple privileged commands that need no interaction, `sudo -A` works directly (rofi askpass popup at `~/.local/bin/sudo-askpass`).
 {% endif %}
