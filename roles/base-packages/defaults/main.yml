@@ -1,0 +1,21 @@
+base_packages:
+  - curl
+  - wget
+  - htop
+  - jq
+  - tree
+  - unzip
+  - man-db
+  - openssh
+
+base_packages_archlinux:
+  - ripgrep
+  - fd
+  - bat
+  - base-devel
+
+base_packages_debian:
+  - ripgrep
+  - fd-find
+  - bat
+  - build-essential

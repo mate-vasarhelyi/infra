@@ -1,0 +1,7 @@
+- name: Install common packages
+  ansible.builtin.package:
+    name: "{{ base_packages }}"
+    state: present
+
+- name: Include distro-specific packages
+  ansible.builtin.include_tasks: "{{ ansible_os_family | lower }}.yml"
