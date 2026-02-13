@@ -1,0 +1,22 @@
+- name: Install kitty
+  ansible.builtin.package:
+    name: kitty
+    state: present
+
+- name: Ensure kitty config directory exists
+  ansible.builtin.file:
+    path: "/home/{{ username }}/.config/kitty"
+    state: directory
+    owner: "{{ username }}"
+    mode: "0755"
+  become: true
+  become_user: "{{ username }}"
+
+- name: Deploy kitty.conf
+  ansible.builtin.copy:
+    src: kitty.conf
+    dest: "/home/{{ username }}/.config/kitty/kitty.conf"
+    owner: "{{ username }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ username }}"
