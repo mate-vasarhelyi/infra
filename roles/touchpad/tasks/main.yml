@@ -1,0 +1,9 @@
+- name: Skip on non-Linux
+  ansible.builtin.meta: end_play
+  when: ansible_system != 'Linux'
+
+- name: Deploy touchpad xorg config
+  ansible.builtin.copy:
+    src: 30-touchpad.conf
+    dest: /etc/X11/xorg.conf.d/30-touchpad.conf
+    mode: "0644"
