@@ -5,6 +5,13 @@
     creates: "/home/{{ username }}/.local/bin/claude"
   become: true
   become_user: "{{ username }}"
+  register: claude_install
+  failed_when: false
+
+- name: Check if Claude Code binary exists
+  ansible.builtin.stat:
+    path: "/home/{{ username }}/.local/bin/claude"
+  register: claude_binary
 
 - name: Ensure ~/.claude directory exists
   ansible.builtin.file:
@@ -61,3 +68,4 @@
   become: true
   become_user: "{{ username }}"
   changed_when: false
+  when: claude_binary.stat.exists
