@@ -1,0 +1,11 @@
+#!/bin/sh
+script="/tmp/claude-pending.sh"
+if [ -f "$script" ]; then
+    echo "Running:"
+    cat "$script"
+    echo ""
+    sudo sh "$script"
+    rm "$script"
+else
+    echo "No pending commands."
+fi
