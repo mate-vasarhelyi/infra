@@ -16,7 +16,8 @@ fi
 if command -v pacman &>/dev/null; then
     $SUDO pacman-key --init
     $SUDO pacman-key --populate archlinux
-    $SUDO pacman -Syu --noconfirm git ansible
+    $SUDO pacman -Sy --noconfirm archlinux-keyring
+    $SUDO pacman -Su --noconfirm git ansible
 elif command -v apt &>/dev/null; then
     $SUDO apt update && $SUDO apt full-upgrade -y && $SUDO apt install -y git ansible
 elif command -v brew &>/dev/null; then
