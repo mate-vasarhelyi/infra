@@ -46,7 +46,15 @@ if [ -f requirements.yml ]; then
     ansible-galaxy collection install -r requirements.yml
 fi
 
+# Set up vault password
+if [ ! -f "$CLONE_DIR/.vault-pass" ]; then
+    read -rsp "Ansible vault password: " vault_pass
+    echo
+    echo "$vault_pass" > "$CLONE_DIR/.vault-pass"
+    chmod 600 "$CLONE_DIR/.vault-pass"
+fi
+
 echo ""
 echo "Ready! Run your playbook:"
 echo "  cd $CLONE_DIR"
-echo "  ansible-playbook site.yml --tags common,desktop --ask-vault-pass"
+echo "  ansible-playbook site.yml --tags common"
