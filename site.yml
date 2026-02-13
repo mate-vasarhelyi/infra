@@ -12,6 +12,16 @@
         name: "{{ username }}"
         shell: /usr/bin/bash
         create_home: true
+        groups: wheel
+        append: true
+      tags: always
+
+    - name: Enable sudo for wheel group
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        regexp: '^# ?%wheel ALL=\(ALL:ALL\) ALL'
+        line: '%wheel ALL=(ALL:ALL) ALL'
+        validate: 'visudo -cf %s'
       tags: always
 
   roles:
