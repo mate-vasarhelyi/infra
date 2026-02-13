@@ -20,6 +20,7 @@
     - { role: fonts,           tags: [common] }
     - { role: tailscale,       tags: [common] }
     - { role: claude-code,     tags: [common] }
+    - { role: custom-scripts,  tags: [common] }
 
     # desktop
     - { role: i3,              tags: [desktop] }
@@ -33,9 +34,6 @@
 
     # purpose
     - { role: docker-stacks,   tags: [media], vars: { stack: media } }
-
-    # dev tools
-    - { role: custom-scripts,  tags: [dev] }
 
     # device-specific
     - { role: fingerprint,     tags: [thinkpad-x1] }

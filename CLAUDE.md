@@ -36,14 +36,13 @@ ansible-playbook site.yml --tags <tags> --ask-become-pass
 
 | Tag | Roles |
 |-----|-------|
-| `common` | base-packages, zsh, git, starship, ssh, fonts, tailscale, claude-code |
+| `common` | base-packages, zsh, git, starship, ssh, fonts, tailscale, claude-code, custom-scripts |
 | `desktop` | i3, rofi, dunst, kitty, touchpad |
 | `server` | docker |
 | `media` | docker, docker-stacks |
-| `dev` | custom-scripts |
 | `thinkpad-x1` | fingerprint, tlp, accelerometer, wwan |
 
-Combine: `--tags common,desktop,dev`
+Combine: `--tags common,desktop`
 
 New roles must be added to `site.yml` with appropriate tags.
 

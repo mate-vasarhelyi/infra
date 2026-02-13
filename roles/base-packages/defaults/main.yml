@@ -14,6 +14,7 @@ base_packages_archlinux:
   - bat
   - base-devel
   - github-cli
+  - kubectl
 
 base_packages_debian:
   - ripgrep
