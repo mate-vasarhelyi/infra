@@ -2,3 +2,4 @@ username: mate
 dotfiles_repo: "https://github.com/mate-vasarhelyi/infra.git"
 timezone: Europe/Budapest
 git_email: "{{ vault_git_email }}"
+git_user_name: "Mate Vasarhelyi"

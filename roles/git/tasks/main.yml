@@ -1,0 +1,13 @@
+- name: Install git
+  ansible.builtin.package:
+    name: git
+    state: present
+
+- name: Deploy .gitconfig
+  ansible.builtin.template:
+    src: gitconfig.j2
+    dest: "/home/{{ username }}/.gitconfig"
+    owner: "{{ username }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ username }}"
