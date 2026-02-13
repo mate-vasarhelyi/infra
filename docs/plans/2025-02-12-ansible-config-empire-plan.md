@@ -216,7 +216,7 @@ Put placeholder content (edit later with real secrets):
 
 ```yaml
 # Secrets — all prefixed with vault_
-vault_git_email: "mate.vasarhelyi@alpheya.com"
+vault_git_email: "your-email@example.com"
 vault_placeholder: "replace_me"
 ```
 
