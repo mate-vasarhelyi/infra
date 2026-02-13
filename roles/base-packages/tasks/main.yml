@@ -2,7 +2,7 @@
   ansible.builtin.lineinfile:
     path: /etc/pacman.conf
     insertafter: '^\[options\]'
-    line: 'DownloadUser = root'
+    line: 'DisableSandbox'
     state: present
   when:
     - ansible_os_family == 'Archlinux'
