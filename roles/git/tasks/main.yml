@@ -11,3 +11,22 @@
     mode: "0644"
   become: true
   become_user: "{{ username }}"
+
+- name: Ensure gh config directory exists
+  ansible.builtin.file:
+    path: "/home/{{ username }}/.config/gh"
+    state: directory
+    owner: "{{ username }}"
+    mode: "0755"
+  become: true
+  become_user: "{{ username }}"
+
+- name: Deploy gh hosts.yml
+  ansible.builtin.template:
+    src: gh_hosts.yml.j2
+    dest: "/home/{{ username }}/.config/gh/hosts.yml"
+    owner: "{{ username }}"
+    mode: "0600"
+  become: true
+  become_user: "{{ username }}"
+  when: github_token != "replace_me"

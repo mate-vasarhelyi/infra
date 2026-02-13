@@ -13,9 +13,11 @@ base_packages_archlinux:
   - fd
   - bat
   - base-devel
+  - github-cli
 
 base_packages_debian:
   - ripgrep
   - fd-find
   - bat
   - build-essential
+  - gh
