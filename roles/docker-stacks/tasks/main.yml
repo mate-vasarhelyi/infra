@@ -1,0 +1,28 @@
+- name: Create stack directory
+  ansible.builtin.file:
+    path: "/opt/docker/{{ stack }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+
+- name: Deploy docker-compose.yml
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/stacks/{{ stack }}/docker-compose.yml"
+    dest: "/opt/docker/{{ stack }}/docker-compose.yml"
+    owner: "{{ username }}"
+    mode: "0644"
+  notify: restart stack
+
+- name: Template .env file
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/stacks/{{ stack }}/.env.j2"
+    dest: "/opt/docker/{{ stack }}/.env"
+    owner: "{{ username }}"
+    mode: "0600"
+  notify: restart stack
+
+- name: Start stack
+  community.docker.docker_compose_v2:
+    project_src: "/opt/docker/{{ stack }}"
+    state: present
