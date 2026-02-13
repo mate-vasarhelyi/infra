@@ -3,7 +3,7 @@
 - OS: {{ ansible_distribution }}{% if desktop_wm is defined %}, {{ desktop_wm }}{% endif %}
 
 - Shell: zsh (minimal, no oh-my-zsh)
-{% if 'desktop' in ansible_play_tags | default([]) %}
+{% if desktop_wm is defined %}
 - Terminal: kitty (FiraCode Nerd Font)
 - Browser: Zen
 {% endif %}
