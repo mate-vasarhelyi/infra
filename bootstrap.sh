@@ -16,6 +16,10 @@ fi
 if command -v pacman &>/dev/null; then
     $SUDO pacman-key --init
     $SUDO pacman-key --populate archlinux
+    # Disable Landlock sandbox in containers (pacman 7.x)
+    if [ -f /run/.containerenv ] || grep -q container=lxc /proc/1/environ 2>/dev/null || systemd-detect-virt -c &>/dev/null; then
+        grep -q "^DownloadUser" /etc/pacman.conf || $SUDO sed -i '/^\[options\]/a DownloadUser = root' /etc/pacman.conf
+    fi
     $SUDO pacman -Sy --noconfirm archlinux-keyring
     $SUDO pacman -Su --noconfirm git ansible
 elif command -v apt &>/dev/null; then

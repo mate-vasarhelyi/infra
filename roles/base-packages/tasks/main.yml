@@ -1,3 +1,13 @@
+- name: Fix pacman Landlock sandbox in containers
+  ansible.builtin.lineinfile:
+    path: /etc/pacman.conf
+    insertafter: '^\[options\]'
+    line: 'DownloadUser = root'
+    state: present
+  when:
+    - ansible_os_family == 'Archlinux'
+    - ansible_virtualization_type in ['lxc', 'docker', 'podman', 'container-other']
+
 - name: Install common packages
   ansible.builtin.package:
     name: "{{ base_packages }}"
