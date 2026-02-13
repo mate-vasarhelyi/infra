@@ -1,0 +1,12 @@
+# ThinkPad X1 Yoga Gen 6 specific
+accelerometer_screen: "eDP-1"
+accelerometer_touch_devices:
+  - "SYNA8009:00 06CB:CE57 Touchpad"
+  - "Wacom HID 5277 Finger"
+  - "Wacom HID 5277 Pen"
+
+tlp_start_charge: 75
+tlp_stop_charge: 80
+
+wwan_fcc_unlock_vid: "1eac"
+wwan_fcc_unlock_pid: "1001"

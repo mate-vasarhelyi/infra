@@ -1,0 +1,44 @@
+- hosts: localhost
+  connection: local
+  become: true
+
+  vars:
+    username: "{{ lookup('env', 'USER') }}"
+
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
+
+  roles:
+    # common
+    - { role: base-packages,   tags: [common] }
+    - { role: zsh,             tags: [common] }
+    - { role: git,             tags: [common] }
+    - { role: starship,        tags: [common] }
+    - { role: ssh,             tags: [common] }
+    - { role: fonts,           tags: [common] }
+
+    # desktop
+    - { role: i3,              tags: [desktop] }
+    - { role: rofi,            tags: [desktop] }
+    - { role: dunst,           tags: [desktop] }
+    - { role: kitty,           tags: [desktop] }
+    - { role: touchpad,        tags: [desktop] }
+
+    # server / services
+    - { role: docker,          tags: [server, media] }
+    - { role: tailscale,       tags: [server] }
+
+    # purpose
+    - { role: docker-stacks,   tags: [media], vars: { stack: media } }
+
+    # dev tools
+    - { role: claude-code,     tags: [dev] }
+    - { role: custom-scripts,  tags: [dev] }
+
+    # device-specific
+    - { role: fingerprint,     tags: [thinkpad-x1] }
+    - { role: tlp,             tags: [thinkpad-x1] }
+    - { role: accelerometer,   tags: [thinkpad-x1] }
+    - { role: wwan,            tags: [thinkpad-x1] }
