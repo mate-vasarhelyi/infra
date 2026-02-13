@@ -6,3 +6,16 @@
     name: tailscaled
     enabled: true
     state: started
+
+- name: Check tailscale status
+  ansible.builtin.command: tailscale status --json
+  register: tailscale_status
+  changed_when: false
+  failed_when: false
+
+- name: Authenticate tailscale
+  ansible.builtin.command: tailscale up --authkey={{ tailscale_authkey }}
+  when: >
+    tailscale_status.rc != 0 or
+    (tailscale_status.stdout | from_json).BackendState != "Running"
+  no_log: true

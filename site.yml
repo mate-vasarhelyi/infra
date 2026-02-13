@@ -18,6 +18,8 @@
     - { role: starship,        tags: [common] }
     - { role: ssh,             tags: [common] }
     - { role: fonts,           tags: [common] }
+    - { role: tailscale,       tags: [common] }
+    - { role: claude-code,     tags: [common] }
 
     # desktop
     - { role: i3,              tags: [desktop] }
@@ -28,13 +30,11 @@
 
     # server / services
     - { role: docker,          tags: [server, media] }
-    - { role: tailscale,       tags: [server] }
 
     # purpose
     - { role: docker-stacks,   tags: [media], vars: { stack: media } }
 
     # dev tools
-    - { role: claude-code,     tags: [dev] }
     - { role: custom-scripts,  tags: [dev] }
 
     # device-specific

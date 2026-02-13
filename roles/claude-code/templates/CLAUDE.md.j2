@@ -10,7 +10,7 @@
 
 # Infrastructure
 
-Managed via Ansible repo at `~/.infra`.
+Managed via Ansible repo at `~/.infra`. **Do not install packages or modify system/user config directly.** Make changes in the Ansible repo first, then apply — keep the live system consistent with the repo, never let it drift.
 
 ```
 cd ~/.infra

@@ -24,6 +24,17 @@
   become: true
   become_user: "{{ username }}"
 
+- name: Deploy OAuth credentials (only if not present)
+  ansible.builtin.template:
+    src: credentials.json.j2
+    dest: "/home/{{ username }}/.claude/.credentials.json"
+    owner: "{{ username }}"
+    mode: "0600"
+    force: false
+  become: true
+  become_user: "{{ username }}"
+  no_log: true
+
 - name: Deploy settings.json
   ansible.builtin.copy:
     src: settings.json
