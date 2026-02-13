@@ -7,9 +7,11 @@
       ansible.builtin.setup:
       tags: always
 
-    - name: Ensure sudo is installed
+    - name: Ensure sudo and dependencies are installed
       ansible.builtin.package:
-        name: sudo
+        name:
+          - sudo
+          - python-passlib
         state: present
       tags: always
 
