@@ -1,0 +1,7 @@
+- name: Install fonts (Arch)
+  community.general.pacman:
+    name:
+      - noto-fonts
+      - ttf-firacode-nerd
+      - ttf-font-awesome
+    state: present

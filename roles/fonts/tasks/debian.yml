@@ -1,0 +1,17 @@
+- name: Install fonts (Debian)
+  ansible.builtin.apt:
+    name:
+      - fonts-noto
+      - fonts-font-awesome
+    state: present
+
+- name: Install FiraCode Nerd Font (Debian)
+  ansible.builtin.shell: |
+    mkdir -p /usr/local/share/fonts/FiraCodeNerd
+    cd /tmp
+    curl -fLo FiraCode.tar.xz https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.tar.xz
+    tar -xf FiraCode.tar.xz -C /usr/local/share/fonts/FiraCodeNerd
+    fc-cache -fv
+    rm -f FiraCode.tar.xz
+  args:
+    creates: /usr/local/share/fonts/FiraCodeNerd
