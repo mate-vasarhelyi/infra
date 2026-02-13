@@ -1,0 +1,6 @@
+- name: Install starship via install script
+  ansible.builtin.shell: |
+    curl -sS https://starship.rs/install.sh | sh -s -- --yes
+  args:
+    creates: /usr/local/bin/starship
+  become: true
