@@ -6,11 +6,17 @@ CLONE_DIR="$HOME/.infra"
 
 echo "=== Config Empire Bootstrap ==="
 
+# Use sudo only if not root
+SUDO=""
+if [ "$(id -u)" -ne 0 ]; then
+    SUDO="sudo"
+fi
+
 # Detect distro and install prerequisites
 if command -v pacman &>/dev/null; then
-    sudo pacman -Syu --noconfirm git ansible
+    $SUDO pacman -Syu --noconfirm git ansible
 elif command -v apt &>/dev/null; then
-    sudo apt update && sudo apt full-upgrade -y && sudo apt install -y git ansible
+    $SUDO apt update && $SUDO apt full-upgrade -y && $SUDO apt install -y git ansible
 elif command -v brew &>/dev/null; then
     brew install git ansible
 else
