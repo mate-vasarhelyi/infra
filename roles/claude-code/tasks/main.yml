@@ -62,9 +62,11 @@
 
 - name: Install Claude Code plugins
   ansible.builtin.shell: |
+    export HOME="/home/{{ username }}"
     /home/{{ username }}/.local/bin/claude plugins install {{ item }}
   loop: "{{ claude_plugins }}"
   become: true
   become_user: "{{ username }}"
   changed_when: false
+  failed_when: false
   when: claude_binary.stat.exists
