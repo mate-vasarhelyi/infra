@@ -1,12 +1,10 @@
 - name: Install Claude Code via official script
   ansible.builtin.shell: |
-    curl -fsSL https://console.anthropic.com/install.sh | sh
+    curl -fsSL https://claude.ai/install.sh | bash
   args:
     creates: "/home/{{ username }}/.local/bin/claude"
   become: true
   become_user: "{{ username }}"
-  register: claude_install
-  failed_when: false
 
 - name: Check if Claude Code binary exists
   ansible.builtin.stat:
