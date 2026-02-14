@@ -1,0 +1,16 @@
+- name: Install passlib (Debian)
+  ansible.builtin.apt:
+    name: python3-passlib
+    state: present
+    update_cache: true
+
+- name: Set admin group
+  ansible.builtin.set_fact:
+    admin_group: sudo
+
+- name: Ensure sudo group has sudo privileges
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    regexp: '^%sudo'
+    line: '%sudo ALL=(ALL:ALL) ALL'
+    validate: 'visudo -cf %s'

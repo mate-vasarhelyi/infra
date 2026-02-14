@@ -1,0 +1,17 @@
+- name: Install sudo
+  ansible.builtin.package:
+    name: sudo
+    state: present
+
+- name: Include distro-specific setup
+  ansible.builtin.include_tasks: "{{ ansible_os_family | lower }}.yml"
+
+- name: Ensure user exists
+  ansible.builtin.user:
+    name: "{{ username }}"
+    password: "{{ user_password | password_hash('sha512') }}"
+    shell: /usr/bin/bash
+    create_home: true
+    groups: "{{ admin_group }}"
+    append: true
+    update_password: on_create
