@@ -6,8 +6,6 @@ base_packages:
   - tree
   - unzip
   - man-db
-  - openssh
-  - sudo
 
 base_packages_archlinux:
   - ripgrep
@@ -16,10 +14,11 @@ base_packages_archlinux:
   - base-devel
   - github-cli
   - kubectl
+  - openssh
 
 base_packages_debian:
   - ripgrep
   - fd-find
   - bat
   - build-essential
-  - gh
+  - openssh-client

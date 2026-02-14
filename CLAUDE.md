@@ -36,7 +36,7 @@ ansible-playbook site.yml --tags <tags> --ask-become-pass
 
 | Tag | Roles |
 |-----|-------|
-| `common` | base-packages, zsh, git, starship, ssh, fonts, tailscale, claude-code, docker, custom-scripts |
+| `common` | user-setup, base-packages, zsh, git, starship, ssh, fonts, tailscale, claude-code, docker, custom-scripts |
 | `desktop` | i3, rofi, dunst, kitty, touchpad |
 | `media` | docker-stacks |
 | `thinkpad-x1` | fingerprint, tlp, accelerometer, wwan |
