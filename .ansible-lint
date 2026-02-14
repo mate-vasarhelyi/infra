@@ -1,0 +1,11 @@
+---
+profile: moderate
+
+skip_list:
+  - risky-shell-pipe
+  - command-instead-of-module
+
+exclude_paths:
+  - stacks/
+  - docs/
+  - .github/

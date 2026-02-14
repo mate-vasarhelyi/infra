@@ -1,4 +1,4 @@
-- name: restart stack
+- name: Restart stack
   community.docker.docker_compose_v2:
     project_src: "/opt/docker/{{ stack }}"
     state: restarted

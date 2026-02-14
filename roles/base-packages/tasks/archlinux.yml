@@ -19,6 +19,7 @@
   ansible.builtin.git:
     repo: https://aur.archlinux.org/yay.git
     dest: /tmp/yay-build
+    version: v12.5.7  # pinned for reproducibility; bump as needed
   become: true
   become_user: "{{ username }}"
   when: yay_check.rc != 0
@@ -29,10 +30,12 @@
     chdir: /tmp/yay-build
   become: true
   become_user: "{{ username }}"
+  changed_when: true
   when: yay_check.rc != 0
 
 - name: Install yay package
   ansible.builtin.shell: pacman -U --noconfirm /tmp/yay-build/yay-*.pkg.tar.zst
+  changed_when: true
   when: yay_check.rc != 0
 
 - name: Clean up yay build
