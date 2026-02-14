@@ -1,0 +1,8 @@
+installation: Cloud
+server: {{ jira_server }}
+login: {{ jira_login }}
+{% if jira_project_key %}
+project:
+    key: {{ jira_project_key }}
+    type: {{ jira_project_type }}
+{% endif %}

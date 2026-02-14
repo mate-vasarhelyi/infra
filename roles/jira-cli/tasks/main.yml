@@ -1,2 +1,22 @@
 - name: Include distro-specific tasks
   ansible.builtin.include_tasks: "{{ ansible_os_family | lower }}.yml"
+
+- name: Ensure jira config directory exists
+  ansible.builtin.file:
+    path: "/home/{{ username }}/.config/.jira"
+    state: directory
+    owner: "{{ username }}"
+    mode: "0755"
+  become: true
+  become_user: "{{ username }}"
+
+- name: Deploy jira-cli config
+  ansible.builtin.template:
+    src: config.yml.j2
+    dest: "/home/{{ username }}/.config/.jira/.config.yml"
+    owner: "{{ username }}"
+    mode: "0600"
+  become: true
+  become_user: "{{ username }}"
+  when: jira_server is defined
+  no_log: true

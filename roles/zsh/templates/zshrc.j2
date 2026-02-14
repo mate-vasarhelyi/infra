@@ -14,6 +14,11 @@ compinit
 export SUDO_ASKPASS="$HOME/.local/bin/sudo-askpass"
 {% endif %}
 
+# Jira CLI
+{% if jira_api_token is defined %}
+export JIRA_API_TOKEN="{{ jira_api_token }}"
+{% endif %}
+
 # PATH
 export PATH="$HOME/.local/bin:$PATH"
 
