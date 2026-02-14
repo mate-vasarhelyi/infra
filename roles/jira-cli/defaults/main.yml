@@ -1,0 +1,4 @@
+jira_cli_version: "1.7.0"
+jira_cli_arch: "{{ ansible_architecture | regex_replace('x86_64', 'x86_64') | regex_replace('aarch64', 'arm64') }}"
+jira_project_key: ""
+jira_project_type: classic
