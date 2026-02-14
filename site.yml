@@ -25,6 +25,7 @@
     - { role: fonts,           tags: [common] }
     - { role: tailscale,       tags: [common] }
     - { role: claude-code,     tags: [common] }
+    - { role: jira-cli,        tags: [common] }
     - { role: docker,          tags: [common] }
     - { role: custom-scripts,  tags: [common] }
 
