@@ -1,2 +1,8 @@
 #!/bin/sh
-rofi -dmenu -password -no-fixed-num-lines -p "sudo password"
+if command -v rofi >/dev/null 2>&1; then
+    rofi -dmenu -password -no-fixed-num-lines -p "sudo password"
+else
+    echo "Password:" >&2
+    read -rs pass
+    echo "$pass"
+fi
