@@ -7,6 +7,13 @@
       ansible.builtin.setup:
       tags: always
 
+    - name: Ensure passlib is available for password_hash filter
+      ansible.builtin.package:
+        name: "{{ (ansible_os_family == 'Archlinux') | ternary('python-passlib', 'python3-passlib') }}"
+        state: present
+      check_mode: false
+      tags: always
+
   roles:
     # common
     - { role: user-setup,      tags: [common] }
