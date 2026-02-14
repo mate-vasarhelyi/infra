@@ -1,6 +1,0 @@
-- name: Install jira-cli from AUR
-  ansible.builtin.command: yay -S --noconfirm --needed jira-cli
-  become: true
-  become_user: "{{ username }}"
-  register: yay_result
-  changed_when: "'there is nothing to do' not in yay_result.stdout"

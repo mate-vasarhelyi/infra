@@ -1,5 +1,12 @@
-- name: Include distro-specific tasks
-  ansible.builtin.include_tasks: "{{ ansible_os_family | lower }}.yml"
+- name: Install jira-cli from GitHub release
+  ansible.builtin.shell: |
+    cd /tmp
+    curl -fLo jira.tar.gz https://github.com/ankitpokhrel/jira-cli/releases/download/v{{ jira_cli_version }}/jira_{{ jira_cli_version }}_linux_{{ jira_cli_arch }}.tar.gz
+    tar -xzf jira.tar.gz
+    install -m 0755 jira_{{ jira_cli_version }}_linux_{{ jira_cli_arch }}/bin/jira /usr/local/bin/jira
+    rm -rf jira.tar.gz jira_{{ jira_cli_version }}_linux_{{ jira_cli_arch }}/
+  args:
+    creates: /usr/local/bin/jira
 
 - name: Ensure jira config directory exists
   ansible.builtin.file:
