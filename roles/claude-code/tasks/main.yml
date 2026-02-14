@@ -1,5 +1,6 @@
 - name: Install Claude Code via official script
   ansible.builtin.shell: |
+    export HOME="/home/{{ username }}"
     curl -fsSL https://claude.ai/install.sh | bash
   args:
     creates: "/home/{{ username }}/.local/bin/claude"
