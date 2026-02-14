@@ -7,35 +7,9 @@
       ansible.builtin.setup:
       tags: always
 
-    - name: Ensure sudo and dependencies are installed
-      ansible.builtin.package:
-        name:
-          - sudo
-          - python-passlib
-        state: present
-      tags: always
-
-    - name: Ensure user exists
-      ansible.builtin.user:
-        name: "{{ username }}"
-        password: "{{ user_password | password_hash('sha512') }}"
-        shell: /usr/bin/bash
-        create_home: true
-        groups: wheel
-        append: true
-        update_password: on_create
-      tags: always
-
-    - name: Enable sudo for wheel group
-      ansible.builtin.lineinfile:
-        path: /etc/sudoers
-        regexp: '^# ?%wheel ALL=\(ALL:ALL\) ALL'
-        line: '%wheel ALL=(ALL:ALL) ALL'
-        validate: 'visudo -cf %s'
-      tags: always
-
   roles:
     # common
+    - { role: user-setup,      tags: [common] }
     - { role: base-packages,   tags: [common] }
     - { role: zsh,             tags: [common] }
     - { role: git,             tags: [common] }
