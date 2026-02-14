@@ -1,12 +1,11 @@
 - name: Install Claude Code via official script
   ansible.builtin.shell: |
-    curl -fsSL https://console.anthropic.com/install.sh | sh
+    export HOME="/home/{{ username }}"
+    curl -fsSL https://claude.ai/install.sh | bash
   args:
     creates: "/home/{{ username }}/.local/bin/claude"
   become: true
   become_user: "{{ username }}"
-  register: claude_install
-  failed_when: false
 
 - name: Check if Claude Code binary exists
   ansible.builtin.stat:
@@ -63,9 +62,11 @@
 
 - name: Install Claude Code plugins
   ansible.builtin.shell: |
+    export HOME="/home/{{ username }}"
     /home/{{ username }}/.local/bin/claude plugins install {{ item }}
   loop: "{{ claude_plugins }}"
   become: true
   become_user: "{{ username }}"
   changed_when: false
+  failed_when: false
   when: claude_binary.stat.exists
