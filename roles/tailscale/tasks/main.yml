@@ -18,4 +18,5 @@
   when: >
     tailscale_status.rc != 0 or
     (tailscale_status.stdout | from_json).BackendState != "Running"
+  changed_when: true
   no_log: true

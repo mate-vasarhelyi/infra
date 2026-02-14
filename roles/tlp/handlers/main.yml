@@ -1,4 +1,4 @@
-- name: restart tlp
+- name: Restart tlp
   ansible.builtin.systemd:
     name: tlp
     state: restarted

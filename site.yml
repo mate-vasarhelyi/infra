@@ -1,4 +1,5 @@
-- hosts: localhost
+- name: Configure localhost
+  hosts: localhost
   connection: local
   become: true
 
