@@ -10,20 +10,20 @@
 
 - name: Ensure jira config directory exists
   ansible.builtin.file:
-    path: "/home/{{ username }}/.config/.jira"
+    path: "/home/{{ target_user }}/.config/.jira"
     state: directory
-    owner: "{{ username }}"
+    owner: "{{ target_user }}"
     mode: "0755"
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
 
 - name: Deploy jira-cli config
   ansible.builtin.template:
     src: config.yml.j2
-    dest: "/home/{{ username }}/.config/.jira/.config.yml"
-    owner: "{{ username }}"
+    dest: "/home/{{ target_user }}/.config/.jira/.config.yml"
+    owner: "{{ target_user }}"
     mode: "0600"
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
   when: jira_server is defined
   no_log: true
