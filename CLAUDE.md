@@ -36,12 +36,13 @@ ansible-playbook site.yml --tags <tags> --ask-become-pass
 
 | Tag | Roles |
 |-----|-------|
-| `common` | user-setup, base-packages, zsh, git, starship, ssh, fonts, tailscale, claude-code, jira-cli, docker, custom-scripts |
+| `env` | base-packages, zsh, git, starship, ssh, fonts, tailscale, claude-code, jira-cli, docker, custom-scripts |
+| `setup` | user-setup + all `env` roles |
 | `desktop` | i3, rofi, dunst, kitty, touchpad |
 | `media` | docker-stacks |
 | `thinkpad-x1` | fingerprint, tlp, accelerometer, wwan |
 
-Combine: `--tags common,desktop`
+Combine: `--tags env,desktop`
 
 New roles must be added to `site.yml` with appropriate tags.
 
@@ -73,7 +74,7 @@ Supported families: `archlinux`, `debian`. Skip non-applicable roles with:
 
 ### Config files
 
-- User configs (dotfiles): `templates/` with `.j2` extension, dest to `/home/{{ username }}/`
+- User configs (dotfiles): `templates/` with `.j2` extension, dest to `/home/{{ target_user }}/` (env/setup roles) or `/home/{{ username }}/` (desktop roles)
 - System configs that must be exact: `files/` with `ansible.builtin.copy`
 - Never use `lineinfile` on PAM files — deploy the complete file
 
@@ -88,14 +89,15 @@ Supported families: `archlinux`, `debian`. Skip non-applicable roles with:
 
 | Type | Owner | Mode |
 |------|-------|------|
-| User configs | `{{ username }}` | `0644` |
-| Secrets (keys, tokens) | `{{ username }}` | `0600` |
-| Scripts | `{{ username }}` | `0755` |
+| User configs (env roles) | `{{ target_user }}` | `0644` |
+| User configs (desktop roles) | `{{ username }}` | `0644` |
+| Secrets (keys, tokens) | `{{ target_user }}` | `0600` |
+| Scripts | `{{ target_user }}` | `0755` |
 | System configs | root | `0644` |
 
 ## Gotchas
 
-- `become: true` makes `ansible_env.HOME` resolve to `/root` — use `/home/{{ username }}/` in paths
+- `become: true` makes `ansible_env.HOME` resolve to `/root` — use `/home/{{ target_user }}/` (env/setup roles) or `/home/{{ username }}/` (desktop roles)
 - `host_vars` filename must match inventory hostname — `localhost.yml`, not the machine name
 - `ansible_distribution` returns `Archlinux` not `EndeavourOS` on EndeavourOS
 - `become_method` is `su`, not `sudo` — avoids fprintd PAM timeout during playbook runs
