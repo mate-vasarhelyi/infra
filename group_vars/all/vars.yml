@@ -1,4 +1,4 @@
-target_user: "{{ ansible_user_id }}"
+target_user: "{{ lookup('env', 'USER') }}"
 username: mate
 dotfiles_repo: "https://github.com/mate-vasarhelyi/infra.git"
 timezone: Europe/Budapest
