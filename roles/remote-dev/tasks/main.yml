@@ -20,11 +20,9 @@
     name: code-server
     enabled: true
     state: started
-    daemon_reload: true
 
 - name: Enable and start ttyd
   ansible.builtin.systemd:
     name: ttyd
     enabled: true
     state: started
-    daemon_reload: true

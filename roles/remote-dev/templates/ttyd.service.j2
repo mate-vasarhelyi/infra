@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User={{ target_user }}
+WorkingDirectory=/home/{{ target_user }}
 ExecStart=/usr/bin/ttyd -p {{ ttyd_port }} -W zellij
 Restart=on-failure
 
