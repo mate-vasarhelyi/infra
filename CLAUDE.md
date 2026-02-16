@@ -41,6 +41,7 @@ ansible-playbook site.yml --tags <tags> --ask-become-pass
 | `tailscale` | tailscale |
 | `desktop` | i3, rofi, dunst, kitty, touchpad |
 | `media` | docker-stacks |
+| `remote-dev` | remote-dev |
 | `thinkpad-x1` | fingerprint, tlp, accelerometer, wwan |
 
 Combine: `--tags env,desktop`
