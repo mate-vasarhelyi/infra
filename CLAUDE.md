@@ -76,7 +76,7 @@ Supported families: `archlinux`, `debian`. Skip non-applicable roles with:
 
 ### Config files
 
-- User configs (dotfiles): `templates/` with `.j2` extension, dest to `/home/{{ target_user }}/` (env/setup roles) or `/home/{{ username }}/` (desktop roles)
+- User configs (dotfiles): `templates/` with `.j2` extension, dest to `/home/{{ target_user }}/`
 - System configs that must be exact: `files/` with `ansible.builtin.copy`
 - Never use `lineinfile` on PAM files — deploy the complete file
 
@@ -91,15 +91,15 @@ Supported families: `archlinux`, `debian`. Skip non-applicable roles with:
 
 | Type | Owner | Mode |
 |------|-------|------|
-| User configs (env roles) | `{{ target_user }}` | `0644` |
-| User configs (desktop roles) | `{{ username }}` | `0644` |
+| User configs | `{{ target_user }}` | `0644` |
 | Secrets (keys, tokens) | `{{ target_user }}` | `0600` |
 | Scripts | `{{ target_user }}` | `0755` |
 | System configs | root | `0644` |
 
 ## Gotchas
 
-- `become: true` makes `ansible_env.HOME` resolve to `/root` — use `/home/{{ target_user }}/` (env/setup roles) or `/home/{{ username }}/` (desktop roles)
+- `become: true` makes `ansible_env.HOME` resolve to `/root` — always use `/home/{{ target_user }}/`
+- `target_user` is prompted at runtime via `vars_prompt` (defaults to `SUDO_USER` or `USER`); `username` is an alias for it
 - `host_vars` filename must match inventory hostname — `localhost.yml`, not the machine name
 - `ansible_distribution` returns `Archlinux` not `EndeavourOS` on EndeavourOS
 - `become_method` defaults to `sudo`; use `-e ansible_become_method=su` on systems where fprintd causes PAM timeout with sudo

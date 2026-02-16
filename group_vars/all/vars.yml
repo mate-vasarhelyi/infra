@@ -1,5 +1,4 @@
-target_user: mate
-username: mate
+username: "{{ target_user }}"
 dotfiles_repo: "https://github.com/mate-vasarhelyi/infra.git"
 timezone: Europe/Budapest
 git_email: "{{ vault_git_email }}"

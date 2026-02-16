@@ -3,6 +3,12 @@
   connection: local
   become: true
 
+  vars_prompt:
+    - name: target_user
+      prompt: "Target username"
+      private: false
+      default: "{{ lookup('env', 'SUDO_USER') | default(lookup('env', 'USER'), true) }}"
+
   pre_tasks:
     - name: Gather facts
       ansible.builtin.setup:
