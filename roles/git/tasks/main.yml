@@ -6,27 +6,27 @@
 - name: Deploy .gitconfig
   ansible.builtin.template:
     src: gitconfig.j2
-    dest: "/home/{{ username }}/.gitconfig"
-    owner: "{{ username }}"
+    dest: "/home/{{ target_user }}/.gitconfig"
+    owner: "{{ target_user }}"
     mode: "0644"
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
 
 - name: Ensure gh config directory exists
   ansible.builtin.file:
-    path: "/home/{{ username }}/.config/gh"
+    path: "/home/{{ target_user }}/.config/gh"
     state: directory
-    owner: "{{ username }}"
+    owner: "{{ target_user }}"
     mode: "0755"
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
 
 - name: Deploy gh hosts.yml
   ansible.builtin.template:
     src: gh_hosts.yml.j2
-    dest: "/home/{{ username }}/.config/gh/hosts.yml"
-    owner: "{{ username }}"
+    dest: "/home/{{ target_user }}/.config/gh/hosts.yml"
+    owner: "{{ target_user }}"
     mode: "0600"
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
   when: github_token != "replace_me"
