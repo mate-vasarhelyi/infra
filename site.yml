@@ -26,7 +26,7 @@
     - { role: starship,        tags: [env, setup] }
     - { role: ssh,             tags: [env, setup] }
     - { role: fonts,           tags: [env, setup] }
-    - { role: tailscale,       tags: [env, setup] }
+    - { role: tailscale,       tags: [tailscale] }
     - { role: claude-code,     tags: [env, setup] }
     - { role: jira-cli,        tags: [env, setup] }
     - { role: nvm,             tags: [env, setup] }
