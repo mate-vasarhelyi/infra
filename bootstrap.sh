@@ -4,6 +4,78 @@ set -euo pipefail
 REPO="https://github.com/mate-vasarhelyi/infra.git"
 CLONE_DIR="$HOME/.infra"
 
+# Phase 2: run from local copy after clone/pull
+if [ "${_INFRA_BOOTSTRAPPED:-}" = "1" ]; then
+    cd "$CLONE_DIR"
+
+    echo ""
+    read -rp "Run the playbook now? [y/N] " run_now </dev/tty
+    if [[ ! "$run_now" =~ ^[Yy]$ ]]; then
+        echo ""
+        echo "Ready! Run your playbook:"
+        echo "  cd $CLONE_DIR"
+        echo "  ansible-playbook site.yml --tags env --ask-become-pass -e target_user=<username>"
+        echo "  ansible-playbook site.yml --tags setup --ask-become-pass -e target_user=<username>"
+        echo ""
+        echo "Add -e ansible_become_method=su for root password auth (default is sudo)"
+        exit 0
+    fi
+
+    # Ask for target username
+    default_user="${SUDO_USER:-}"
+    if [ -n "$default_user" ] && [ "$default_user" != "root" ]; then
+        read -rp "Target username [$default_user]: " target_user </dev/tty
+        target_user="${target_user:-$default_user}"
+    else
+        read -rp "Target username: " target_user </dev/tty
+        if [ -z "$target_user" ]; then
+            echo "Username is required."
+            exit 1
+        fi
+    fi
+
+    echo ""
+    echo "Which tags?"
+    echo "  1) env    — packages + config for $target_user"
+    echo "  2) setup  — create $target_user + full env (new systems)"
+    echo "  3) custom — enter your own tags"
+    echo ""
+    read -rp "Choice [1/2/3]: " tag_choice </dev/tty
+    case "$tag_choice" in
+        1) tags="env" ;;
+        2) tags="setup" ;;
+        3)
+            read -rp "Enter tags (comma-separated): " tags </dev/tty
+            ;;
+        *)
+            echo "Invalid choice, exiting."
+            exit 1
+            ;;
+    esac
+
+    echo ""
+    echo "Privilege escalation method?"
+    echo "  1) sudo — use your user password (most systems)"
+    echo "  2) su   — use the root password (Arch with fprintd)"
+    echo ""
+    read -rp "Choice [1/2]: " become_choice </dev/tty
+    case "$become_choice" in
+        1) become_method="sudo" ;;
+        2) become_method="su" ;;
+        *)
+            echo "Invalid choice, exiting."
+            exit 1
+            ;;
+    esac
+
+    echo ""
+    echo "Running: ansible-playbook site.yml --tags $tags --ask-become-pass -e ansible_become_method=$become_method -e target_user=$target_user"
+    echo ""
+    ansible-playbook site.yml --tags "$tags" --ask-become-pass -e "ansible_become_method=$become_method" -e "target_user=$target_user"
+    exit 0
+fi
+
+# Phase 1: install prerequisites, clone repo, then re-exec local copy
 echo "=== Config Empire Bootstrap ==="
 
 # Use sudo only if not root
@@ -56,63 +128,7 @@ fi
 
 echo ""
 echo "=== Bootstrap complete ==="
-echo ""
-read -rp "Run the playbook now? [y/N] " run_now </dev/tty
-if [[ "$run_now" =~ ^[Yy]$ ]]; then
-    # Ask for target username first
-    default_user="${SUDO_USER:-}"
-    if [ -n "$default_user" ] && [ "$default_user" != "root" ]; then
-        read -rp "Target username [$default_user]: " target_user </dev/tty
-        target_user="${target_user:-$default_user}"
-    else
-        read -rp "Target username: " target_user </dev/tty
-        if [ -z "$target_user" ]; then
-            echo "Username is required."
-            exit 1
-        fi
-    fi
-    echo ""
-    echo "Which tags?"
-    echo "  1) env    — packages + config for $target_user"
-    echo "  2) setup  — create $target_user + full env (new systems)"
-    echo "  3) custom — enter your own tags"
-    echo ""
-    read -rp "Choice [1/2/3]: " tag_choice </dev/tty
-    case "$tag_choice" in
-        1) tags="env" ;;
-        2) tags="setup" ;;
-        3)
-            read -rp "Enter tags (comma-separated): " tags </dev/tty
-            ;;
-        *)
-            echo "Invalid choice, exiting."
-            exit 1
-            ;;
-    esac
-    echo ""
-    echo "Privilege escalation method?"
-    echo "  1) sudo — use your user password (most systems)"
-    echo "  2) su   — use the root password (Arch with fprintd)"
-    echo ""
-    read -rp "Choice [1/2]: " become_choice </dev/tty
-    case "$become_choice" in
-        1) become_method="sudo" ;;
-        2) become_method="su" ;;
-        *)
-            echo "Invalid choice, exiting."
-            exit 1
-            ;;
-    esac
-    echo ""
-    echo "Running: ansible-playbook site.yml --tags $tags --ask-become-pass -e ansible_become_method=$become_method -e target_user=$target_user"
-    echo ""
-    ansible-playbook site.yml --tags "$tags" --ask-become-pass -e "ansible_become_method=$become_method" -e "target_user=$target_user"
-else
-    echo ""
-    echo "Ready! Run your playbook:"
-    echo "  cd $CLONE_DIR"
-    echo "  ansible-playbook site.yml --tags env --ask-become-pass -e target_user=<username>"
-    echo "  ansible-playbook site.yml --tags setup --ask-become-pass -e target_user=<username>"
-    echo ""
-    echo "Add -e ansible_become_method=su for root password auth (default is sudo)"
-fi
+
+# Re-exec from local copy so all prompts use the latest version
+export _INFRA_BOOTSTRAPPED=1
+exec bash "$CLONE_DIR/bootstrap.sh"

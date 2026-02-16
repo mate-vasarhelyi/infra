@@ -3,15 +3,18 @@
   connection: local
   become: true
 
-  vars_prompt:
-    - name: target_user
-      prompt: "Target username"
-      private: false
-      default: "{{ lookup('env', 'SUDO_USER') | default(lookup('env', 'USER'), true) }}"
-
   pre_tasks:
     - name: Gather facts
       ansible.builtin.setup:
+      tags: always
+
+    - name: Validate target_user is set
+      ansible.builtin.assert:
+        that:
+          - target_user is defined
+          - target_user | length > 0
+          - target_user != 'root'
+        fail_msg: "target_user must be set via -e target_user=<username>"
       tags: always
 
     - name: Ensure passlib is available for password_hash filter

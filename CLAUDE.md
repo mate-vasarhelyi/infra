@@ -3,7 +3,7 @@
 Configures machines from fresh install. Runs against localhost.
 
 ```
-ansible-playbook site.yml --tags <tags> --ask-become-pass
+ansible-playbook site.yml --tags <tags> --ask-become-pass -e target_user=<username>
 ```
 
 - `become_method = sudo` (default; use `-e ansible_become_method=su` on systems with fprintd PAM timeout)
@@ -99,7 +99,7 @@ Supported families: `archlinux`, `debian`. Skip non-applicable roles with:
 ## Gotchas
 
 - `become: true` makes `ansible_env.HOME` resolve to `/root` — always use `/home/{{ target_user }}/`
-- `target_user` is prompted at runtime via `vars_prompt` (defaults to `SUDO_USER` or `USER`); `username` is an alias for it
+- `target_user` must be passed via `-e target_user=<name>` (bootstrap.sh handles this automatically); `username` is an alias for it in `group_vars`
 - `host_vars` filename must match inventory hostname — `localhost.yml`, not the machine name
 - `ansible_distribution` returns `Archlinux` not `EndeavourOS` on EndeavourOS
 - `become_method` defaults to `sudo`; use `-e ansible_become_method=su` on systems where fprintd causes PAM timeout with sudo
