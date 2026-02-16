@@ -6,6 +6,7 @@ base_packages:
   - tree
   - unzip
   - man-db
+  - zellij
 
 base_packages_archlinux:
   - ripgrep
