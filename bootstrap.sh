@@ -48,7 +48,7 @@ fi
 
 # Set up vault password
 if [ ! -f "$CLONE_DIR/.vault-pass" ]; then
-    read -rsp "Ansible vault password: " vault_pass
+    read -rsp "Ansible vault password: " vault_pass </dev/tty
     echo
     echo "$vault_pass" > "$CLONE_DIR/.vault-pass"
     chmod 600 "$CLONE_DIR/.vault-pass"
