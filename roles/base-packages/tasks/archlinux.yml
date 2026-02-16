@@ -21,7 +21,7 @@
     dest: /tmp/yay-build
     version: v12.5.7  # pinned for reproducibility; bump as needed
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
   when: yay_check.rc != 0
 
 - name: Build yay
@@ -29,7 +29,7 @@
   args:
     chdir: /tmp/yay-build
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
   changed_when: true
   when: yay_check.rc != 0
 
