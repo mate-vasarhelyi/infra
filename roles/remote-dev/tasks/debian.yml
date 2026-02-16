@@ -1,0 +1,11 @@
+- name: Install code-server via official script
+  ansible.builtin.shell: curl -fsSL https://code-server.dev/install.sh | sh
+  args:
+    creates: /usr/bin/code-server
+
+- name: Install ttyd from GitHub release
+  ansible.builtin.shell: |
+    curl -fLo /usr/bin/ttyd "https://github.com/tsl0922/ttyd/releases/download/{{ ttyd_version }}/ttyd.{{ ansible_architecture }}"
+    chmod 0755 /usr/bin/ttyd
+  args:
+    creates: /usr/bin/ttyd

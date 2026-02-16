@@ -1,0 +1,12 @@
+[Unit]
+Description=code-server
+After=network.target
+
+[Service]
+Type=simple
+User={{ target_user }}
+ExecStart=/usr/bin/code-server --bind-addr 0.0.0.0:{{ code_server_port }} --auth none /
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

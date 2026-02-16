@@ -1,0 +1,12 @@
+[Unit]
+Description=ttyd - web terminal with zellij
+After=network.target
+
+[Service]
+Type=simple
+User={{ target_user }}
+ExecStart=/usr/bin/ttyd -p {{ ttyd_port }} -W zellij
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

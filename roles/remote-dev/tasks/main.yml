@@ -1,0 +1,30 @@
+- name: Include distro-specific tasks
+  ansible.builtin.include_tasks: "{{ ansible_os_family | lower }}.yml"
+
+- name: Deploy code-server systemd unit
+  ansible.builtin.template:
+    src: code-server.service.j2
+    dest: /etc/systemd/system/code-server.service
+    mode: "0644"
+  notify: Restart code-server
+
+- name: Deploy ttyd systemd unit
+  ansible.builtin.template:
+    src: ttyd.service.j2
+    dest: /etc/systemd/system/ttyd.service
+    mode: "0644"
+  notify: Restart ttyd
+
+- name: Enable and start code-server
+  ansible.builtin.systemd:
+    name: code-server
+    enabled: true
+    state: started
+    daemon_reload: true
+
+- name: Enable and start ttyd
+  ansible.builtin.systemd:
+    name: ttyd
+    enabled: true
+    state: started
+    daemon_reload: true

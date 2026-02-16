@@ -1,0 +1,9 @@
+- name: Install ttyd
+  community.general.pacman:
+    name: ttyd
+    state: present
+
+- name: Install code-server via official script
+  ansible.builtin.shell: curl -fsSL https://code-server.dev/install.sh | sh
+  args:
+    creates: /usr/bin/code-server

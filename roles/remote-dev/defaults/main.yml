@@ -1,0 +1,3 @@
+code_server_port: 8080
+ttyd_port: 7681
+ttyd_version: "1.7.7"

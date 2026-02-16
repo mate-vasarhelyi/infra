@@ -42,6 +42,7 @@
 
     # purpose
     - { role: docker-stacks,   tags: [media], vars: { stack: media } }
+    - { role: remote-dev,      tags: [remote-dev] }
 
     # device-specific
     - { role: fingerprint,     tags: [thinkpad-x1] }
