@@ -6,7 +6,7 @@ Configures machines from fresh install. Runs against localhost.
 ansible-playbook site.yml --tags <tags> --ask-become-pass
 ```
 
-- `become_method = su` (avoids fprintd PAM timeout with sudo)
+- `become_method = sudo` (default; use `-e ansible_become_method=su` on systems with fprintd PAM timeout)
 - Vault password: `.vault-pass` (gitignored)
 - Galaxy deps: `ansible-galaxy collection install -r requirements.yml`
 
@@ -15,7 +15,7 @@ ansible-playbook site.yml --tags <tags> --ask-become-pass
 ```
 ~/.infra/
 ├── site.yml              # Main playbook — all roles listed here
-├── ansible.cfg           # become_method=su, vault_password_file
+├── ansible.cfg           # become_method=sudo, vault_password_file
 ├── bootstrap.sh          # Fresh machine setup script
 ├── requirements.yml      # Galaxy collections (community.docker, community.general)
 ├── group_vars/all/
@@ -100,7 +100,7 @@ Supported families: `archlinux`, `debian`. Skip non-applicable roles with:
 - `become: true` makes `ansible_env.HOME` resolve to `/root` — use `/home/{{ target_user }}/` (env/setup roles) or `/home/{{ username }}/` (desktop roles)
 - `host_vars` filename must match inventory hostname — `localhost.yml`, not the machine name
 - `ansible_distribution` returns `Archlinux` not `EndeavourOS` on EndeavourOS
-- `become_method` is `su`, not `sudo` — avoids fprintd PAM timeout during playbook runs
+- `become_method` defaults to `sudo`; use `-e ansible_become_method=su` on systems where fprintd causes PAM timeout with sudo
 - PAM file ordering: `pam_fprintd.so` must go BEFORE `pam_unix.so` but AFTER `pam_faillock.so preauth`; update `success=N` skip counts if adding/removing lines
 - Never use sed/lineinfile on `/etc/pam.d/` files — a bad edit locks you out of sudo
 - `ansible-vault rekey` needs the old password to decrypt first, then re-encrypts with new

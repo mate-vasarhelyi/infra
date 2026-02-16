@@ -102,5 +102,5 @@ else
     echo "  ansible-playbook site.yml --tags env --ask-become-pass    # existing system"
     echo "  ansible-playbook site.yml --tags setup --ask-become-pass  # new system"
     echo ""
-    echo "Add -e ansible_become_method=sudo if su fails (default is su from ansible.cfg)"
+    echo "Add -e ansible_become_method=su for root password auth (default is sudo)"
 fi
