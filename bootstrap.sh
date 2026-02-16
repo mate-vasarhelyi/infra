@@ -78,13 +78,29 @@ if [[ "$run_now" =~ ^[Yy]$ ]]; then
             ;;
     esac
     echo ""
-    echo "Running: ansible-playbook site.yml --tags $tags --ask-become-pass"
+    echo "Privilege escalation method?"
+    echo "  1) sudo — use your user password (most systems)"
+    echo "  2) su   — use the root password (Arch with fprintd)"
     echo ""
-    ansible-playbook site.yml --tags "$tags" --ask-become-pass
+    read -rp "Choice [1/2]: " become_choice </dev/tty
+    case "$become_choice" in
+        1) become_method="sudo" ;;
+        2) become_method="su" ;;
+        *)
+            echo "Invalid choice, exiting."
+            exit 1
+            ;;
+    esac
+    echo ""
+    echo "Running: ansible-playbook site.yml --tags $tags --ask-become-pass -e ansible_become_method=$become_method"
+    echo ""
+    ansible-playbook site.yml --tags "$tags" --ask-become-pass -e "ansible_become_method=$become_method"
 else
     echo ""
     echo "Ready! Run your playbook:"
     echo "  cd $CLONE_DIR"
     echo "  ansible-playbook site.yml --tags env --ask-become-pass    # existing system"
     echo "  ansible-playbook site.yml --tags setup --ask-become-pass  # new system"
+    echo ""
+    echo "Add -e ansible_become_method=sudo if su fails (default is su from ansible.cfg)"
 fi
