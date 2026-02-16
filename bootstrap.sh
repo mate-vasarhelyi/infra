@@ -55,6 +55,36 @@ if [ ! -f "$CLONE_DIR/.vault-pass" ]; then
 fi
 
 echo ""
-echo "Ready! Run your playbook:"
-echo "  cd $CLONE_DIR"
-echo "  ansible-playbook site.yml --tags common"
+echo "=== Bootstrap complete ==="
+echo ""
+read -rp "Run the playbook now? [y/N] " run_now </dev/tty
+if [[ "$run_now" =~ ^[Yy]$ ]]; then
+    echo ""
+    echo "Which tags?"
+    echo "  1) env    — packages + config for current user"
+    echo "  2) setup  — create user + full env (new systems)"
+    echo "  3) custom — enter your own tags"
+    echo ""
+    read -rp "Choice [1/2/3]: " tag_choice </dev/tty
+    case "$tag_choice" in
+        1) tags="env" ;;
+        2) tags="setup" ;;
+        3)
+            read -rp "Enter tags (comma-separated): " tags </dev/tty
+            ;;
+        *)
+            echo "Invalid choice, exiting."
+            exit 1
+            ;;
+    esac
+    echo ""
+    echo "Running: ansible-playbook site.yml --tags $tags --ask-become-pass"
+    echo ""
+    ansible-playbook site.yml --tags "$tags" --ask-become-pass
+else
+    echo ""
+    echo "Ready! Run your playbook:"
+    echo "  cd $CLONE_DIR"
+    echo "  ansible-playbook site.yml --tags env --ask-become-pass    # existing system"
+    echo "  ansible-playbook site.yml --tags setup --ask-become-pass  # new system"
+fi
