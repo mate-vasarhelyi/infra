@@ -1,0 +1,19 @@
+- name: Install nvm via official script
+  ansible.builtin.shell: |
+    export HOME="/home/{{ target_user }}"
+    curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/v{{ nvm_version }}/install.sh" | bash
+  args:
+    creates: "/home/{{ target_user }}/.nvm/nvm.sh"
+  become: true
+  become_user: "{{ target_user }}"
+
+- name: Install LTS Node.js
+  ansible.builtin.shell: |
+    export HOME="/home/{{ target_user }}"
+    export NVM_DIR="/home/{{ target_user }}/.nvm"
+    . "$NVM_DIR/nvm.sh"
+    nvm install --lts
+  args:
+    creates: "/home/{{ target_user }}/.nvm/alias/lts/*"
+  become: true
+  become_user: "{{ target_user }}"
