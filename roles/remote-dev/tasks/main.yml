@@ -20,9 +20,11 @@
     name: code-server
     enabled: true
     state: started
+  when: not ansible_check_mode
 
 - name: Enable and start ttyd
   ansible.builtin.systemd:
     name: ttyd
     enabled: true
     state: started
+  when: not ansible_check_mode
