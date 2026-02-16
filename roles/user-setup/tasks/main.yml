@@ -8,7 +8,7 @@
 
 - name: Ensure user exists
   ansible.builtin.user:
-    name: "{{ username }}"
+    name: "{{ target_user }}"
     password: "{{ user_password | password_hash('sha512') }}"
     shell: /usr/bin/bash
     create_home: true
