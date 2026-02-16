@@ -91,10 +91,15 @@ if [[ "$run_now" =~ ^[Yy]$ ]]; then
             exit 1
             ;;
     esac
+    # Ask for target username
+    default_user="${SUDO_USER:-$USER}"
     echo ""
-    echo "Running: ansible-playbook site.yml --tags $tags --ask-become-pass -e ansible_become_method=$become_method"
+    read -rp "Target username [$default_user]: " target_user </dev/tty
+    target_user="${target_user:-$default_user}"
     echo ""
-    ansible-playbook site.yml --tags "$tags" --ask-become-pass -e "ansible_become_method=$become_method"
+    echo "Running: ansible-playbook site.yml --tags $tags --ask-become-pass -e ansible_become_method=$become_method -e target_user=$target_user"
+    echo ""
+    ansible-playbook site.yml --tags "$tags" --ask-become-pass -e "ansible_become_method=$become_method" -e "target_user=$target_user"
 else
     echo ""
     echo "Ready! Run your playbook:"
