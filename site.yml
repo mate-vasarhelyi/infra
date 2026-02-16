@@ -16,19 +16,21 @@
       tags: always
 
   roles:
-    # common
-    - { role: user-setup,      tags: [common] }
-    - { role: base-packages,   tags: [common] }
-    - { role: zsh,             tags: [common] }
-    - { role: git,             tags: [common] }
-    - { role: starship,        tags: [common] }
-    - { role: ssh,             tags: [common] }
-    - { role: fonts,           tags: [common] }
-    - { role: tailscale,       tags: [common] }
-    - { role: claude-code,     tags: [common] }
-    - { role: jira-cli,        tags: [common] }
-    - { role: docker,          tags: [common] }
-    - { role: custom-scripts,  tags: [common] }
+    # setup = create user (new systems only)
+    - { role: user-setup,      tags: [setup] }
+
+    # env = packages + user config (works standalone or after setup)
+    - { role: base-packages,   tags: [env, setup] }
+    - { role: zsh,             tags: [env, setup] }
+    - { role: git,             tags: [env, setup] }
+    - { role: starship,        tags: [env, setup] }
+    - { role: ssh,             tags: [env, setup] }
+    - { role: fonts,           tags: [env, setup] }
+    - { role: tailscale,       tags: [env, setup] }
+    - { role: claude-code,     tags: [env, setup] }
+    - { role: jira-cli,        tags: [env, setup] }
+    - { role: docker,          tags: [env, setup] }
+    - { role: custom-scripts,  tags: [env, setup] }
 
     # desktop
     - { role: i3,              tags: [desktop] }
