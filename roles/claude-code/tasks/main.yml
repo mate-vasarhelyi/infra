@@ -1,72 +1,72 @@
 - name: Install Claude Code via official script
   ansible.builtin.shell: |
-    export HOME="/home/{{ username }}"
+    export HOME="/home/{{ target_user }}"
     curl -fsSL https://claude.ai/install.sh | bash
   args:
-    creates: "/home/{{ username }}/.local/bin/claude"
+    creates: "/home/{{ target_user }}/.local/bin/claude"
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
 
 - name: Check if Claude Code binary exists
   ansible.builtin.stat:
-    path: "/home/{{ username }}/.local/bin/claude"
+    path: "/home/{{ target_user }}/.local/bin/claude"
   register: claude_binary
 
 - name: Ensure ~/.claude directory exists
   ansible.builtin.file:
-    path: "/home/{{ username }}/.claude"
+    path: "/home/{{ target_user }}/.claude"
     state: directory
-    owner: "{{ username }}"
+    owner: "{{ target_user }}"
     mode: "0755"
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
 
 - name: Deploy CLAUDE.md
   ansible.builtin.template:
     src: CLAUDE.md.j2
-    dest: "/home/{{ username }}/.claude/CLAUDE.md"
-    owner: "{{ username }}"
+    dest: "/home/{{ target_user }}/.claude/CLAUDE.md"
+    owner: "{{ target_user }}"
     mode: "0644"
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
 
 - name: Deploy OAuth credentials (only if not present)
   ansible.builtin.template:
     src: credentials.json.j2
-    dest: "/home/{{ username }}/.claude/.credentials.json"
-    owner: "{{ username }}"
+    dest: "/home/{{ target_user }}/.claude/.credentials.json"
+    owner: "{{ target_user }}"
     mode: "0600"
     force: false
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
   no_log: true
 
 - name: Deploy settings.json
   ansible.builtin.copy:
     src: settings.json
-    dest: "/home/{{ username }}/.claude/settings.json"
-    owner: "{{ username }}"
+    dest: "/home/{{ target_user }}/.claude/settings.json"
+    owner: "{{ target_user }}"
     mode: "0644"
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
 
 - name: Deploy settings.local.json (only if not present)
   ansible.builtin.template:
     src: settings.local.json.j2
-    dest: "/home/{{ username }}/.claude/settings.local.json"
-    owner: "{{ username }}"
+    dest: "/home/{{ target_user }}/.claude/settings.local.json"
+    owner: "{{ target_user }}"
     mode: "0644"
     force: false
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
 
 - name: Install Claude Code plugins
   ansible.builtin.shell: |
-    export HOME="/home/{{ username }}"
-    /home/{{ username }}/.local/bin/claude plugins install {{ item }}
+    export HOME="/home/{{ target_user }}"
+    /home/{{ target_user }}/.local/bin/claude plugins install {{ item }}
   loop: "{{ claude_plugins }}"
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
   changed_when: false
   failed_when: false
   when: claude_binary.stat.exists
