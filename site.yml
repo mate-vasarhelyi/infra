@@ -29,6 +29,7 @@
     - { role: tailscale,       tags: [env, setup] }
     - { role: claude-code,     tags: [env, setup] }
     - { role: jira-cli,        tags: [env, setup] }
+    - { role: nvm,             tags: [env, setup] }
     - { role: docker,          tags: [env, setup] }
     - { role: custom-scripts,  tags: [env, setup] }
 
