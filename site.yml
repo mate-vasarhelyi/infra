@@ -8,18 +8,6 @@
       ansible.builtin.setup:
       tags: always
 
-    - name: Fix conflicting APT source entries (Debian)
-      ansible.builtin.shell: |
-        for f in /etc/apt/sources.list.d/*github*cli*; do
-          [ -f "$f" ] && grep -q '/usr/share/keyrings/' "$f" && rm -f "$f"
-        done
-      args:
-        executable: /bin/bash
-      changed_when: false
-      failed_when: false
-      when: ansible_os_family == 'Debian'
-      tags: always
-
     - name: Ensure passlib is available for password_hash filter
       ansible.builtin.package:
         name: "{{ (ansible_os_family == 'Archlinux') | ternary('python-passlib', 'python3-passlib') }}"
