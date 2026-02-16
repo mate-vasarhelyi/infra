@@ -1,7 +1,7 @@
 - name: Install zellij from GitHub release
   ansible.builtin.shell: |
     cd /tmp
-    curl -fLo zellij.tar.gz https://github.com/zellij-org/zellij/releases/download/v{{ zellij_version }}/zellij-{{ ansible_architecture }}-unknown-linux-musl.tar.gz
+    curl -fLo zellij.tar.gz "https://github.com/zellij-org/zellij/releases/latest/download/zellij-{{ ansible_architecture }}-unknown-linux-musl.tar.gz"
     tar -xzf zellij.tar.gz
     install -m 0755 zellij /usr/local/bin/zellij
     rm -f zellij.tar.gz zellij

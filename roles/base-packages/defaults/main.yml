@@ -7,8 +7,6 @@ base_packages:
   - unzip
   - man-db
 
-zellij_version: "0.43.1"
-
 base_packages_archlinux:
   - zellij
   - ripgrep
