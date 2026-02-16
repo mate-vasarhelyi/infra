@@ -7,13 +7,24 @@
   become: true
   become_user: "{{ target_user }}"
 
+- name: Check if LTS Node.js is installed
+  ansible.builtin.shell: |
+    export NVM_DIR="/home/{{ target_user }}/.nvm"
+    . "$NVM_DIR/nvm.sh"
+    nvm ls --no-colors lts/* 2>/dev/null | grep -qv "N/A"
+  become: true
+  become_user: "{{ target_user }}"
+  register: nvm_lts_check
+  changed_when: false
+  failed_when: false
+
 - name: Install LTS Node.js
   ansible.builtin.shell: |
     export HOME="/home/{{ target_user }}"
     export NVM_DIR="/home/{{ target_user }}/.nvm"
     . "$NVM_DIR/nvm.sh"
     nvm install --lts
-  args:
-    creates: "/home/{{ target_user }}/.nvm/alias/lts/*"
   become: true
   become_user: "{{ target_user }}"
+  when: nvm_lts_check.rc != 0
+  changed_when: true
