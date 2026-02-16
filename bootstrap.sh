@@ -59,10 +59,22 @@ echo "=== Bootstrap complete ==="
 echo ""
 read -rp "Run the playbook now? [y/N] " run_now </dev/tty
 if [[ "$run_now" =~ ^[Yy]$ ]]; then
+    # Ask for target username first
+    default_user="${SUDO_USER:-}"
+    if [ -n "$default_user" ] && [ "$default_user" != "root" ]; then
+        read -rp "Target username [$default_user]: " target_user </dev/tty
+        target_user="${target_user:-$default_user}"
+    else
+        read -rp "Target username: " target_user </dev/tty
+        if [ -z "$target_user" ]; then
+            echo "Username is required."
+            exit 1
+        fi
+    fi
     echo ""
     echo "Which tags?"
-    echo "  1) env    — packages + config for current user"
-    echo "  2) setup  — create user + full env (new systems)"
+    echo "  1) env    — packages + config for $target_user"
+    echo "  2) setup  — create $target_user + full env (new systems)"
     echo "  3) custom — enter your own tags"
     echo ""
     read -rp "Choice [1/2/3]: " tag_choice </dev/tty
@@ -91,11 +103,6 @@ if [[ "$run_now" =~ ^[Yy]$ ]]; then
             exit 1
             ;;
     esac
-    # Ask for target username
-    default_user="${SUDO_USER:-$USER}"
-    echo ""
-    read -rp "Target username [$default_user]: " target_user </dev/tty
-    target_user="${target_user:-$default_user}"
     echo ""
     echo "Running: ansible-playbook site.yml --tags $tags --ask-become-pass -e ansible_become_method=$become_method -e target_user=$target_user"
     echo ""
@@ -104,8 +111,8 @@ else
     echo ""
     echo "Ready! Run your playbook:"
     echo "  cd $CLONE_DIR"
-    echo "  ansible-playbook site.yml --tags env --ask-become-pass    # existing system"
-    echo "  ansible-playbook site.yml --tags setup --ask-become-pass  # new system"
+    echo "  ansible-playbook site.yml --tags env --ask-become-pass -e target_user=<username>"
+    echo "  ansible-playbook site.yml --tags setup --ask-become-pass -e target_user=<username>"
     echo ""
     echo "Add -e ansible_become_method=su for root password auth (default is sudo)"
 fi
