@@ -1,20 +1,20 @@
 - name: Ensure ~/.local/bin exists
   ansible.builtin.file:
-    path: "/home/{{ username }}/.local/bin"
+    path: "/home/{{ target_user }}/.local/bin"
     state: directory
-    owner: "{{ username }}"
+    owner: "{{ target_user }}"
     mode: "0755"
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
 
 - name: Deploy custom scripts
   ansible.builtin.copy:
     src: "{{ item }}"
-    dest: "/home/{{ username }}/.local/bin/{{ item }}"
-    owner: "{{ username }}"
+    dest: "/home/{{ target_user }}/.local/bin/{{ item }}"
+    owner: "{{ target_user }}"
     mode: "0755"
   loop:
     - sudo-askpass
     - run-claude
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ target_user }}"
