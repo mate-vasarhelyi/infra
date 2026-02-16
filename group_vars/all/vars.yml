@@ -1,4 +1,4 @@
-target_user: "{{ lookup('env', 'USER') }}"
+target_user: mate
 username: mate
 dotfiles_repo: "https://github.com/mate-vasarhelyi/infra.git"
 timezone: Europe/Budapest
