@@ -40,6 +40,7 @@
   become: true
   become_user: "{{ target_user }}"
   no_log: true
+  when: claude_oauth_refresh_token is defined
 
 - name: Deploy settings.json
   ansible.builtin.copy:

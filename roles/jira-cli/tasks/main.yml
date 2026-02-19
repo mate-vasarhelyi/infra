@@ -25,5 +25,5 @@
     mode: "0600"
   become: true
   become_user: "{{ target_user }}"
-  when: jira_server is defined
+  when: jira_server is defined and jira_login is defined
   no_log: true
