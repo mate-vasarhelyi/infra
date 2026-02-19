@@ -1,0 +1,7 @@
+services:
+  dev:
+    image: ghcr.io/mate-vasarhelyi/infra-dev:latest
+    ports:
+      - "8080:8080"
+      - "7681:7681"
+    restart: unless-stopped
