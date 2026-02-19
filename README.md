@@ -7,10 +7,8 @@ Ansible playbook that configures dev machines from a fresh install. Runs locally
 No Ansible knowledge needed. Just Docker.
 
 ```bash
-git clone https://github.com/mate-vasarhelyi/infra.git
-cd infra
-docker build --network=host -t infra-dev .
-docker run -d -p 8080:8080 -p 7681:7681 --name dev infra-dev
+curl -fsSL https://raw.githubusercontent.com/mate-vasarhelyi/infra/main/docker-compose.yml -o docker-compose.yml
+docker compose up -d
 ```
 
 Then open in your browser:
@@ -23,14 +21,13 @@ That's it. You have a full dev environment with zsh, starship, git, node, claude
 To stop and remove:
 
 ```bash
-docker stop dev && docker rm dev
+docker compose down
 ```
 
-To rebuild after pulling new changes:
+To pull the latest image:
 
 ```bash
-git pull
-docker build --network=host -t infra-dev .
+docker compose pull && docker compose up -d
 ```
 
 ### What's included
@@ -41,9 +38,25 @@ Tools that need authentication (Claude Code, GitHub CLI, Jira CLI) are installed
 
 ### Troubleshooting
 
-- **Build fails with DNS errors:** Make sure you use `--network=host` in the build command.
-- **Port already in use:** Change the host port, e.g. `-p 9080:8080 -p 9681:7681`, then access on those ports instead.
-- **Want to persist your work:** Mount a volume: `docker run -d -p 8080:8080 -p 7681:7681 -v ~/projects:/home/dev/projects --name dev infra-dev`
+- **Port already in use:** Change the host port in `docker-compose.yml`, e.g. `"9080:8080"`, then access on that port instead.
+- **Want to persist your work:** Add a volume to `docker-compose.yml` under the `dev` service:
+  ```yaml
+      volumes:
+        - ~/projects:/home/dev/projects
+  ```
+
+### Build from source
+
+If you prefer to build the image yourself instead of using the pre-built one:
+
+```bash
+git clone https://github.com/mate-vasarhelyi/infra.git
+cd infra
+docker build --network=host -t infra-dev .
+docker run -d -p 8080:8080 -p 7681:7681 --name dev infra-dev
+```
+
+Note: `--network=host` is required for the build because Ansible runs `apt-get` inside the build and BuildKit's default DNS can fail.
 
 ## Quick Start (bare metal)
 
@@ -89,8 +102,10 @@ site.yml                 # main playbook
 ansible.cfg              # become_method=sudo, vault config
 bootstrap.sh             # one-liner fresh install script
 Dockerfile               # containerized dev environment
+docker-compose.yml       # run pre-built image with docker compose
 docker-defaults.yml      # placeholder values for Docker (no secrets needed)
 docker-entrypoint.sh     # starts code-server + ttyd in container
+.github/workflows/       # CI: lint (PRs) + Docker publish (main)
 group_vars/all/vars.yml  # shared variables
 group_vars/all/vault.yml # encrypted secrets
 roles/<name>/            # ansible roles
