@@ -15,8 +15,13 @@
     creates: /etc/apt/keyrings/docker.asc
 
 - name: Add Docker apt repository
+  vars:
+    docker_arch: >-
+      {{ ansible_architecture | regex_replace('x86_64', 'amd64') | regex_replace('aarch64', 'arm64') }}
   ansible.builtin.apt_repository:
-    repo: "deb [arch={{ ansible_architecture | regex_replace('x86_64', 'amd64') }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    repo: >-
+      deb [arch={{ docker_arch }} signed-by=/etc/apt/keyrings/docker.asc]
+      https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
     state: present
 
 - name: Install docker (Debian)
