@@ -1,0 +1,6 @@
+# Placeholder values for running the playbook without vault secrets.
+# Tools are installed but not pre-authenticated — users log in manually.
+user_password: "changeme"
+git_email: "dev@localhost"
+github_token: "replace_me"
+container_mode: true

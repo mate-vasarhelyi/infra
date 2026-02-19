@@ -1,0 +1,4 @@
+.git
+.vault-pass
+*.retry
+docs/

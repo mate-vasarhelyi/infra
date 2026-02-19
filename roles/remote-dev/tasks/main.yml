@@ -20,11 +20,11 @@
     name: code-server
     enabled: true
     state: started
-  when: not ansible_check_mode
+  when: not ansible_check_mode and not (container_mode | default(false))
 
 - name: Enable and start ttyd
   ansible.builtin.systemd:
     name: ttyd
     enabled: true
     state: started
-  when: not ansible_check_mode
+  when: not ansible_check_mode and not (container_mode | default(false))
