@@ -20,7 +20,9 @@ ansible-playbook site.yml --tags <tags> --ask-become-pass -e target_user=<userna
 ├── Dockerfile            # Containerized dev environment (bakes playbook at build time)
 ├── docker-defaults.yml   # Placeholder values for secretless Docker builds
 ├── docker-entrypoint.sh  # Starts code-server + ttyd (used instead of systemd in containers)
+├── docker-compose.yml    # Run pre-built image (docker compose up)
 ├── .dockerignore         # Excludes .git, .vault-pass, docs/ from build context
+├── .github/workflows/    # CI: lint (PRs) + Docker publish (main)
 ├── requirements.yml      # Galaxy collections (community.docker, community.general)
 ├── group_vars/all/
 │   ├── vars.yml          # Shared variables (vault_ refs go here)
@@ -66,6 +68,8 @@ docker run -d -p 8080:8080 -p 7681:7681 infra-dev
 - `container_mode: true` (set in `docker-defaults.yml`) skips all `ansible.builtin.systemd` tasks
 - Entrypoint starts code-server (:8080) and ttyd+zellij (:7681) directly as processes
 - Tools that need auth (claude, gh, jira) are installed but not logged in
+- CI workflow (`.github/workflows/docker-publish.yml`) builds multi-platform image (amd64 + arm64) on every push to main and publishes to `ghcr.io/mate-vasarhelyi/infra-dev`
+- `docker-compose.yml` at repo root references the GHCR image for easy `docker compose up`
 
 ## Writing Roles
 
