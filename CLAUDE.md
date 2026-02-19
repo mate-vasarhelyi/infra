@@ -17,6 +17,10 @@ ansible-playbook site.yml --tags <tags> --ask-become-pass -e target_user=<userna
 ├── site.yml              # Main playbook — all roles listed here
 ├── ansible.cfg           # become_method=sudo, vault_password_file
 ├── bootstrap.sh          # Fresh machine setup script
+├── Dockerfile            # Containerized dev environment (bakes playbook at build time)
+├── docker-defaults.yml   # Placeholder values for secretless Docker builds
+├── docker-entrypoint.sh  # Starts code-server + ttyd (used instead of systemd in containers)
+├── .dockerignore         # Excludes .git, .vault-pass, docs/ from build context
 ├── requirements.yml      # Galaxy collections (community.docker, community.general)
 ├── group_vars/all/
 │   ├── vars.yml          # Shared variables (vault_ refs go here)
@@ -47,6 +51,21 @@ ansible-playbook site.yml --tags <tags> --ask-become-pass -e target_user=<userna
 Combine: `--tags env,desktop`
 
 New roles must be added to `site.yml` with appropriate tags.
+
+## Docker
+
+Build and run a containerized dev environment (no Ansible or vault needed):
+
+```
+docker build --network=host -t infra-dev .
+docker run -d -p 8080:8080 -p 7681:7681 infra-dev
+```
+
+- Runs `--tags setup,remote-dev` at build time with `docker-defaults.yml` overriding vault vars
+- Replaces encrypted `vault.yml` with empty file and strips `vault_password_file` from `ansible.cfg` during build
+- `container_mode: true` (set in `docker-defaults.yml`) skips all `ansible.builtin.systemd` tasks
+- Entrypoint starts code-server (:8080) and ttyd+zellij (:7681) directly as processes
+- Tools that need auth (claude, gh, jira) are installed but not logged in
 
 ## Writing Roles
 
@@ -106,3 +125,6 @@ Supported families: `archlinux`, `debian`. Skip non-applicable roles with:
 - PAM file ordering: `pam_fprintd.so` must go BEFORE `pam_unix.so` but AFTER `pam_faillock.so preauth`; update `success=N` skip counts if adding/removing lines
 - Never use sed/lineinfile on `/etc/pam.d/` files — a bad edit locks you out of sudo
 - `ansible-vault rekey` needs the old password to decrypt first, then re-encrypts with new
+- `container_mode` variable (default: false) skips systemd tasks in docker/remote-dev roles; set to `true` in `docker-defaults.yml` for Docker builds
+- Docker BuildKit DNS can fail — use `--network=host` on the `docker build` command
+- Vault-dependent tasks in claude-code and jira-cli are guarded with `when: <var> is defined` so they skip gracefully without secrets
